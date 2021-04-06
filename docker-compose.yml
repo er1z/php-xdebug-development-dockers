@@ -1,0 +1,38 @@
+version: "2.2"
+services:
+  www:
+    image: nginx
+    volumes:
+      - ./:/app
+    ports:
+      - "10080:1337"
+    depends_on:
+      - app
+
+  app:
+    image: php-fpm
+    environment:
+      APP_DATABASE_URL: "mysql://root:root@db:3306/db"
+    depends_on:
+      - db
+    volumes:
+      - ./:/app
+    extra_hosts:
+     - "host.docker.internal:host-gateway"
+
+  db:
+    image: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user
+    
+    volumes: 
+        - mysql:/var/lib/mysql
+    ports:
+        - "13306:3306"
+
+volumes:
+  mysql:
