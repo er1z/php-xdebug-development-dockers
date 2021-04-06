@@ -3,8 +3,10 @@ FROM php:7.4-fpm-alpine
 RUN apk add --no-cache --virtual .build-deps \
 	&& apk add --no-cache py3-pip autoconf build-base git zsh shadow curl make \
 	acl file gettext git mariadb-client \
-	coreutils freetype-dev icu-dev libjpeg-turbo-dev libpng-dev libtool \
+	coreutils freetype-dev icu-dev libjpeg-turbo libjpeg-turbo-dev libpng-dev libtool \
 	libwebp-dev libzip-dev mariadb-dev zlib-dev yarn \ 
+	freetype-dev libjpeg-turbo-dev libpng-dev \
+	&& docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd zip exif intl pdo_mysql opcache \
     && pip install supervisor \
     && pecl install xdebug apcu \
